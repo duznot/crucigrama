@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crucigramas de Herramientas Digitales</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Actividad Semana 11-12</p>
+        <h1>Crucigramas de Herramientas Digitales</h1>
+        <p class="student">Sharith Elena Parada Contreras · CC 1116494576</p>
+      </div>
+      <div class="score" aria-live="polite">
+        <span id="progressText">0%</span>
+        <small>completado</small>
+      </div>
+    </header>
+
+    <section class="toolbar" aria-label="Controles del crucigrama">
+      <div class="tabs" role="tablist" aria-label="Seleccionar crucigrama">
+        <button class="tab active" type="button" data-puzzle="0">Crucigrama 1</button>
+        <button class="tab" type="button" data-puzzle="1">Crucigrama 2</button>
+      </div>
+      <div class="actions">
+        <button type="button" id="checkBtn">Comprobar</button>
+        <button type="button" id="revealBtn">Revelar</button>
+        <button type="button" id="clearBtn">Limpiar</button>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <div class="board-wrap">
+        <div class="board-header">
+          <div>
+            <h2 id="puzzleTitle">Crucigrama</h2>
+            <p id="puzzleSubtitle"></p>
+          </div>
+          <span id="categoryBadge"></span>
+        </div>
+        <div id="board" class="board" aria-label="Tablero del crucigrama"></div>
+      </div>
+
+      <aside class="clues" aria-label="Pistas">
+        <h2>Pistas utilizadas</h2>
+        <div class="clue-columns">
+          <section>
+            <h3>Horizontales</h3>
+            <ol id="acrossClues"></ol>
+          </section>
+          <section>
+            <h3>Verticales</h3>
+            <ol id="downClues"></ol>
+          </section>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
