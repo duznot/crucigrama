@@ -268,7 +268,8 @@ function renderClues(puzzle) {
 function handleInput(event) {
   const input = event.target;
   input.value = input.value.toUpperCase().replace(/[^A-Z]/g, "");
-  input.parentElement.classList.remove("correct", "wrong");
+  validateCell(input);
+  updateCompletedWords();
   if (input.value) moveToNext(input);
   updateProgress();
 }
@@ -332,29 +333,65 @@ function moveByArrow(input, key) {
 
 function checkAnswers() {
   board.querySelectorAll("input").forEach((input) => {
-    const cell = input.parentElement;
-    cell.classList.remove("correct", "wrong");
-    if (!input.value) return;
-    cell.classList.add(input.value === input.dataset.answer ? "correct" : "wrong");
+    validateCell(input);
   });
+  updateCompletedWords();
   updateProgress();
 }
 
 function revealAnswers() {
   board.querySelectorAll("input").forEach((input) => {
     input.value = input.dataset.answer;
-    input.parentElement.classList.remove("wrong");
-    input.parentElement.classList.add("correct");
+    validateCell(input);
   });
+  updateCompletedWords();
   updateProgress();
 }
 
 function clearAnswers() {
   board.querySelectorAll("input").forEach((input) => {
     input.value = "";
-    input.parentElement.classList.remove("correct", "wrong");
+    input.readOnly = false;
+    input.parentElement.classList.remove("correct", "wrong", "locked");
   });
+  document.querySelectorAll(".clues li").forEach((item) => item.classList.remove("completed"));
   updateProgress();
+}
+
+function validateCell(input) {
+  const cell = input.parentElement;
+  cell.classList.remove("correct", "wrong");
+  if (!input.value) return;
+  cell.classList.add(input.value === input.dataset.answer ? "correct" : "wrong");
+}
+
+function updateCompletedWords() {
+  board.querySelectorAll("input").forEach((input) => {
+    input.readOnly = false;
+    input.parentElement.classList.remove("locked");
+  });
+
+  puzzles[currentPuzzle].words.forEach((word) => {
+    const inputs = getWordInputs(word);
+    const completed = inputs.every((input) => input.value === input.dataset.answer);
+    const clue = document.querySelector(`.clues li[data-word-id="${word.id}"]`);
+    clue?.classList.toggle("completed", completed);
+
+    if (completed) {
+      inputs.forEach((input) => {
+        input.readOnly = true;
+        input.parentElement.classList.add("correct", "locked");
+      });
+    }
+  });
+}
+
+function getWordInputs(word) {
+  return [...word.answer].map((_, index) => {
+    const row = word.row + (word.dir === "down" ? index : 0);
+    const col = word.col + (word.dir === "across" ? index : 0);
+    return document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+  });
 }
 
 function updateProgress() {
